@@ -1,23 +1,24 @@
-// CATS APPP
+var express = require("express");
 
-// SERVER checked and is listening 12/22
-const exphbs = require("express-handlebars");
-const express = require("express");
-// const mysql = require("mysql");
+var PORT = process.env.PORT || 8000;
+var app = express();
 
-const app = express();
+// Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static("public"));
 
-// Set the port of our application
-const PORT = process.env.PORT || 5000;
-
-// Sets up the Express app to handle data parsing
+// Parse application body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+
+var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-app.listen(PORT, () =>
-  console.log(`Server listening on: http://localhost:${PORT}`)
-);
+var routes = require("./controllers/burgersController.js");
+
+app.use(routes);
+
+app.listen(PORT, function() {
+  console.log("Listening on port:%s", PORT);
+});
